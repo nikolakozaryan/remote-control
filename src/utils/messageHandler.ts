@@ -3,6 +3,7 @@ import { RawData } from 'ws';
 import { drawCircle, drawRectangle } from './drawFigures';
 import { parseAction } from './parseAction';
 import { WebSocket } from 'ws';
+import { Actions } from '../constants/constants';
 
 export const messageHandler = async (data: RawData, ws: WebSocket) => {
   const message = data.toString();
@@ -11,31 +12,31 @@ export const messageHandler = async (data: RawData, ws: WebSocket) => {
   const { x, y } = await mouse.getPosition();
 
   switch (actionType) {
-    case 'mouse_up':
+    case Actions.mouseUp:
       await mouse.move(up(delta));
       break;
-    case 'mouse_down':
+    case Actions.mouseDown:
       await mouse.move(down(delta));
       break;
-    case 'mouse_left':
+    case Actions.mouseLeft:
       await mouse.move(left(delta));
       break;
-    case 'mouse_right':
+    case Actions.mouseRight:
       await mouse.move(right(delta));
       break;
-    case 'mouse_position':
+    case Actions.mousePos:
       ws.send(`mouse_position ${x},${y}`);
       break;
-    case 'draw_circle':
+    case Actions.drawCircle:
       await drawCircle(x, y, delta);
       break;
-    case 'draw_rectangle':
+    case Actions.drawRectangle:
       await drawRectangle(delta, height);
       break;
-    case 'draw_square':
+    case Actions.drawSquare:
       await drawRectangle(delta, delta);
       break;
-    case 'prnt_scrn':
+    case Actions.prtnScrn:
       break;
     default:
       console.log('Something went wrong');
