@@ -1,42 +1,48 @@
-import { down, left, mouse, right, up } from '@nut-tree/nut-js';
-import { RawData } from 'ws';
-import { drawCircle, drawRectangle } from './drawFigures';
-import { parseAction } from './parseAction';
-import { WebSocket } from 'ws';
+import { RawData, WebSocket } from 'ws';
+import { parseAction } from '../utils/parseAction';
 import { Actions } from '../constants/constants';
+import { getScreen } from '../utils/getScreen';
+import {
+  mouseDown,
+  mouseLeft,
+  mouseRight,
+  mouseUp,
+} from '../utils/movePointer';
+import { getPosition } from '../utils/getPosition';
+import { drawCircle, drawRectangle } from '../utils/drawFigure';
 
 export const messageHandler = async (data: RawData, ws: WebSocket) => {
   const message = data.toString();
   const { actionType, coordinates } = parseAction(message);
-  const [delta, height] = coordinates;
-  const { x, y } = await mouse.getPosition();
+  const [dx, dy] = coordinates;
 
   switch (actionType) {
     case Actions.mouseUp:
-      await mouse.move(up(delta));
+      await mouseUp(dx);
       break;
     case Actions.mouseDown:
-      await mouse.move(down(delta));
+      await mouseDown(dx);
       break;
     case Actions.mouseLeft:
-      await mouse.move(left(delta));
+      await mouseLeft(dx);
       break;
     case Actions.mouseRight:
-      await mouse.move(right(delta));
+      await mouseRight(dx);
       break;
     case Actions.mousePos:
-      ws.send(`mouse_position ${x},${y}`);
+      await getPosition(ws);
       break;
     case Actions.drawCircle:
-      await drawCircle(x, y, delta);
+      await drawCircle(dx);
       break;
     case Actions.drawRectangle:
-      await drawRectangle(delta, height);
+      await drawRectangle(dx, dy);
       break;
     case Actions.drawSquare:
-      await drawRectangle(delta, delta);
+      await drawRectangle(dx, dx);
       break;
     case Actions.prtnScrn:
+      await getScreen(ws);
       break;
     default:
       console.log('Something went wrong');

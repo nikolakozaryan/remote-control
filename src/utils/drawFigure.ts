@@ -18,11 +18,13 @@ export async function drawRectangle(width: number, height: number) {
   await mouse.releaseButton(Button.LEFT);
 }
 
-export async function drawCircle(x: number, y: number, radius: number) {
+export async function drawCircle(radius: number) {
+  const { x, y } = await mouse.getPosition();
   const deg = Math.PI / 180;
   const center_x = x + radius;
   const center_y = y;
   await mouse.pressButton(Button.LEFT);
+
   for (let i = 180; i >= -180; i -= 3) {
     const cur_x = center_x + radius * Math.cos(deg * i);
     const cur_y = center_y + radius * Math.sin(deg * i);

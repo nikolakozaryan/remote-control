@@ -1,7 +1,8 @@
 import { WebSocketServer, createWebSocketStream } from 'ws';
-import { messageHandler } from '../utils/messageHandler';
+import { WS_PORT } from '../constants/constants';
+import { messageHandler } from '../handlers/messageHandler';
 
-export const createWSS = (port: number) => {
+const createWSS = (port: number) => {
   const wss = new WebSocketServer({ port });
   console.log(`WS server started on port ${port}`);
 
@@ -30,3 +31,5 @@ export const createWSS = (port: number) => {
 
   return wss;
 };
+
+export const wss = createWSS(WS_PORT);
