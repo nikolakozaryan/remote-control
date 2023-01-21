@@ -7,10 +7,17 @@ const createWSS = (port: number) => {
   console.log(`WS server started on port ${port}`);
 
   wss.on('connection', (ws) => {
-    const duplex = createWebSocketStream(ws);
+    const duplex = createWebSocketStream(ws, {
+      decodeStrings: false,
+      encoding: 'utf8',
+    });
 
-    ws.on('message', (message) => {
-      messageHandler(message, ws);
+    duplex.on('data', async (command) => {
+      try {
+        await messageHandler(command, duplex);
+      } catch {
+        console.log('kind of error happened');
+      }
     });
 
     ws.on('close', () => {
@@ -24,9 +31,6 @@ const createWSS = (port: number) => {
 
   wss.on('close', () => {
     console.log('Server was stopped');
-    wss.clients.forEach((ws) => {
-      ws.close();
-    });
   });
 
   return wss;

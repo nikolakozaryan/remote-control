@@ -1,4 +1,5 @@
-import { RawData, WebSocket } from 'ws';
+import { RawData } from 'ws';
+import { Duplex } from 'stream';
 import { parseAction } from '../utils/parseAction';
 import { Actions } from '../constants/constants';
 import { getScreen } from '../utils/getScreen';
@@ -11,7 +12,7 @@ import {
 import { getPosition } from '../utils/getPosition';
 import { drawCircle, drawRectangle } from '../utils/drawFigure';
 
-export const messageHandler = async (data: RawData, ws: WebSocket) => {
+export const messageHandler = async (data: RawData, stream: Duplex) => {
   const message = data.toString();
   const { actionType, coordinates } = parseAction(message);
   const [dx, dy] = coordinates;
@@ -30,7 +31,7 @@ export const messageHandler = async (data: RawData, ws: WebSocket) => {
       await mouseRight(dx);
       break;
     case Actions.mousePos:
-      await getPosition(ws);
+      await getPosition(stream);
       break;
     case Actions.drawCircle:
       await drawCircle(dx);
@@ -42,7 +43,7 @@ export const messageHandler = async (data: RawData, ws: WebSocket) => {
       await drawRectangle(dx, dx);
       break;
     case Actions.prtnScrn:
-      await getScreen(ws);
+      await getScreen(stream);
       break;
     default:
       console.log('Something went wrong');
