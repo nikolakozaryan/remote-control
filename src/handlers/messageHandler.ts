@@ -15,37 +15,48 @@ import { drawCircle, drawRectangle } from '../utils/drawFigure';
 export const messageHandler = async (data: RawData, stream: Duplex) => {
   const message = data.toString();
   const { actionType, coordinates } = parseAction(message);
+  console.log(`Action: ${actionType}`);
   const [dx, dy] = coordinates;
+  let actionResult = '';
 
   switch (actionType) {
     case Actions.mouseUp:
-      await mouseUp(dx);
+      stream.write(actionType);
+      actionResult = await mouseUp(dx);
       break;
     case Actions.mouseDown:
-      await mouseDown(dx);
+      stream.write(actionType);
+      actionResult = await mouseDown(dx);
       break;
     case Actions.mouseLeft:
-      await mouseLeft(dx);
+      stream.write(actionType);
+      actionResult = await mouseLeft(dx);
       break;
     case Actions.mouseRight:
-      await mouseRight(dx);
+      stream.write(actionType);
+      actionResult = await mouseRight(dx);
       break;
     case Actions.mousePos:
-      await getPosition(stream);
+      actionResult = await getPosition(stream);
       break;
     case Actions.drawCircle:
-      await drawCircle(dx);
+      stream.write(actionType);
+      actionResult = await drawCircle(dx);
       break;
     case Actions.drawRectangle:
-      await drawRectangle(dx, dy);
+      stream.write(actionType);
+      actionResult = await drawRectangle(dx, dy);
       break;
     case Actions.drawSquare:
-      await drawRectangle(dx, dx);
+      stream.write(actionType);
+      actionResult = await drawRectangle(dx, dx);
       break;
     case Actions.prtnScrn:
-      await getScreen(stream);
+      actionResult = await getScreen(stream);
       break;
     default:
       console.log('Something went wrong');
   }
+
+  console.log(`Result: ${actionResult}`);
 };

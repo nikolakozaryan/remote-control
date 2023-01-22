@@ -1,14 +1,18 @@
 import { mouse, up, down, left, right } from '@nut-tree/nut-js';
 
-export async function mouseUp(distance: number) {
+export const mouseUp = async (distance: number): Promise<string> => {
   await mouse.move(up(distance));
-}
-export async function mouseDown(distance: number) {
+  return `The pointer has been moved ${distance}px up`;
+};
+export const mouseDown = async (distance: number): Promise<string> => {
   await mouse.move(down(distance));
-}
-export async function mouseLeft(distance: number) {
+  return `The pointer has been moved ${distance}px down`;
+};
+export const mouseLeft = async (distance: number): Promise<string> => {
   await mouse.move(left(distance));
-}
-export async function mouseRight(distance: number) {
+  return `The pointer has been moved ${distance}px left`;
+};
+export const mouseRight = async (distance: number): Promise<string> => {
   await mouse.move(right(distance));
-}
+  return `The pointer has been moved ${distance}px right`;
+};

@@ -3,7 +3,7 @@ import Jimp from 'jimp';
 import { Actions } from '../constants/constants';
 import { Duplex } from 'stream';
 
-export const getScreen = async (stream: Duplex) => {
+export const getScreen = async (stream: Duplex): Promise<string> => {
   const { x, y } = await mouse.getPosition();
   const left = x - 100;
   const top = y - 100;
@@ -17,4 +17,6 @@ export const getScreen = async (stream: Duplex) => {
 
   const response = `${Actions.prtnScrn} ${buffer}`;
   stream.write(response);
+
+  return 'The screenshot has been made';
 };

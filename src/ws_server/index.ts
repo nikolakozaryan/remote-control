@@ -16,7 +16,7 @@ const createWSS = (port: number) => {
       try {
         await messageHandler(command, duplex);
       } catch {
-        console.log('kind of error happened');
+        console.log('Kinda error happened');
       }
     });
 
@@ -27,6 +27,10 @@ const createWSS = (port: number) => {
     ws.on('error', (error) => {
       console.log('Error: ', error);
     });
+  });
+
+  wss.on('connection', () => {
+    console.log('New client connected!');
   });
 
   wss.on('close', () => {
