@@ -15,17 +15,17 @@ const createWSS = (port: number) => {
     duplex.on('data', async (command) => {
       try {
         await messageHandler(command, duplex);
-      } catch {
-        console.log('Kinda error happened');
+      } catch (err) {
+        console.log(`Error: ${(err as Error).message}`);
       }
     });
 
-    ws.on('close', () => {
+    ws.onclose = () => {
       console.log(`Client disconnected`);
-    });
+    };
 
     ws.on('error', (error) => {
-      console.log('Error: ', error);
+      console.log('Error: ', error.message);
     });
   });
 

@@ -5,11 +5,10 @@ import { wss } from './ws_server';
 console.log(`Start static http server on the ${HTTP_PORT} port!`);
 httpServer.listen(HTTP_PORT);
 
-process.on('exit', () => {
+process.on('SIGINT', () => {
   wss.clients.forEach((ws) => {
     ws.close();
   });
   wss.close();
+  process.exit();
 });
-
-process.on('SIGINT', () => process.exit());
